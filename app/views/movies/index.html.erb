@@ -1,7 +1,5 @@
 <!--  This file is app/views/movies/index.html.erb -->
 <h2>All Movies</h2>
-
-<%#  Part 2: Start here... %>
 <%= form_tag movies_path, method: :get, id: 'ratings_form' do %>
   Include:
   <% @all_ratings.each do |rating| %>
@@ -12,13 +10,18 @@
   <% end %>
   <%= submit_tag 'Refresh', id: 'ratings_submit', class: 'btn btn-primary' %>
 <% end %>
+<%#  Part 2: Start here... %>
 
 <table class="table table-striped col-md-12" id="movies">
   <thead>
     <tr>
-      <th>Movie Title</th>
+      <th class="<%= (@hilite if @sort == 'title') %>">
+        <%= link_to 'Movie Title', movies_path({:sort => :title}.merge({:ratings => params[:ratings]})) %>
+      </th>
       <th>Rating</th>
-      <th>Release Date</th>
+      <th class="<%= (@hilite if @sort == 'release_date') %>">
+        <%= link_to 'Release Date', movies_path({:sort => :release_date}.merge({:ratings => params[:ratings]})) %>
+      </th>
       <th>More Info</th>
     </tr>
   </thead>
