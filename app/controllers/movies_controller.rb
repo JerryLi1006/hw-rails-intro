@@ -10,8 +10,13 @@ class MoviesController < ApplicationController
       @all_ratings = Movie.all_ratings
 
       if params[:ratings].nil?
-        @movies = Movie.all
-        @ratings_to_show = Array.new
+        if !session[:ratings].nil?
+          @ratings_to_show = session[:ratings].keys
+          @movies = Movie.where(rating: @ratings_to_show)
+        else
+          @movies = Movie.all
+          @ratings_to_show = Array.new
+        end
       else
         @ratings_to_show = params[:ratings].keys
         @movies = Movie.where(rating: @ratings_to_show)
@@ -20,7 +25,16 @@ class MoviesController < ApplicationController
         @sort = params[:sort]
         @hilite = 'hilite bg-warning'
         @movies = @movies.order(@sort)
+      else
+        if !session[:sort].nil?
+          @sort = session[:sort]
+          @hilite = 'hilite bg-warning'
+          @movies = @movies.order(@sort)
+        end
       end
+
+      session[:sort] = @sort
+      session[:ratings] = params[:ratings]
       
     end
 
